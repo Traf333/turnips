@@ -8,6 +8,7 @@
 
 import React, {useEffect, useState} from 'react';
 import type {Node} from 'react';
+import VectorImage from 'react-native-vector-image';
 
 import {
   SafeAreaView,
@@ -21,9 +22,8 @@ import {
 
 import {
   Colors,
-  Header,
 } from 'react-native/Libraries/NewAppScreen';
-import {speeches} from './src/lib/storage';
+import {speeches} from './lib/storage';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -75,6 +75,7 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <VectorImage source={require('./assets/microphone.svg')} width={30} height={30}/>
           <Section title={text}>
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
