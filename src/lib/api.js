@@ -11,7 +11,12 @@ const extractedId = id => id.split('speech-')[1];
 export const fetchPlays = async () => {
   const res = await fetch(`${API_URL}/play.json`);
   const json = await res.json();
-  // await PlayRepository.bulkCreate(json);
+  return json;
+};
+
+export const fetchPlay = async (id) => {
+  const res = await fetch(`${API_URL}/play.json`);
+  const json = await res.json();
   return json;
 };
 
@@ -34,25 +39,9 @@ export const updateSpeech = async (id, params) => {
   return await res.json();
 };
 
-export const fetchSpeechesFromServer = async playId => {
-  console.log('fetch from the server');
+export const fetchSpeeches = async playId => {
   const res = await fetch(`${API_URL}/speeches.json?play_id=${playId}`);
   return await res.json();
-};
-
-export const fetchSpeeches = async playId => {
-  // let speeches = await SpeechRepository.all(playId);
-  if (speeches.length > 0) {
-    return speeches;
-  }
-  const speeches = await fetchSpeechesFromServer(playId);
-  console.log('speech size', speeches.length);
-  try {
-    // await SpeechRepository.bulkCreate(speeches);
-  } catch (e) {
-    console.log('error to put', e.message);
-  }
-  return speeches;
 };
 
 export const deleteSpeech = async id => {
