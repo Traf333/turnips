@@ -1,108 +1,96 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, {useEffect, useState} from 'react';
-import type {Node} from 'react';
+import React from 'react';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import PlaysScreen from './screens/PlaysScreen';
+import TurnipScreen from './screens/TurnipScreen';
+import EditSpeechScreen from './screens/EditSpeechScreen';
 import VectorImage from 'react-native-vector-image';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-import {speeches} from './lib/storage';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+function SettingsScreen() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => console.log('touch reset')} style={styles.button}>
+        <Text style={styles.buttonText}>Стереть данные</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const [text, setText] = useState(speeches.getString('first-s-2'));
-  useEffect(() => {
-    if (!text) {
-      speeches.setString('first-s-2', 'Great32123 ');
-      setText('Grea1233122t ');
-    }
-  }, []);
+const HomeStack = createStackNavigator();
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="PlaysScreen"
+        component={PlaysScreen}
+        options={{title: 'Репы'}}
+      />
+      <HomeStack.Screen
+        name="TurnipScreen"
+        component={TurnipScreen}
+        options={({route}) => ({title: route.params.title})}
+      />
+      <HomeStack.Screen
+        name="EditSpeechScreen"
+        component={EditSpeechScreen}
+        options={{
+          title: 'Редактирование речи',
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'}/>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <VectorImage source={require('./assets/microphone.svg')} width={30} height={30}/>
-          <Section title={text}>
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({color, size}) => {
+            let icons = {
+              Home: require('./assets/news.svg'),
+              Settings: require('./assets/settings.svg'),
+            };
+            return <VectorImage source={icons[route.name]} width={30} height={30} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+          keyboardHidesTabBar: true,
+        }}>
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+    padding: 30,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  button: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  buttonText: {
+    fontSize: 22,
+    color: 'white',
   },
 });
-
-export default App;
