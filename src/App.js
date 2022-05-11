@@ -23,57 +23,76 @@ function SettingsScreen() {
     </View>
   );
 }
-
+//
 const HomeStack = createStackNavigator();
+//
+// function HomeStackScreen() {
+//   return (
+//     <HomeStack.Navigator>
+//       <HomeStack.Screen
+//         name="PlaysScreen"
+//         component={PlaysScreen}
+//         options={{title: 'Репы'}}
+//       />
+//       <HomeStack.Screen
+//         name="TurnipScreen"
+//         component={TurnipScreen}
+//         options={({route}) => ({title: route.params.title})}
+//       />
+//       <HomeStack.Screen
+//         name="EditSpeechScreen"
+//         component={EditSpeechScreen}
+//         options={{
+//           title: 'Редактирование речи',
+//         }}
+//       />
+//     </HomeStack.Navigator>
+//   );
+// }
 
-function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="PlaysScreen"
-        component={PlaysScreen}
-        options={{title: 'Репы'}}
-      />
-      <HomeStack.Screen
-        name="TurnipScreen"
-        component={TurnipScreen}
-        options={({route}) => ({title: route.params.title})}
-      />
-      <HomeStack.Screen
-        name="EditSpeechScreen"
-        component={EditSpeechScreen}
-        options={{
-          title: 'Редактирование речи',
-        }}
-      />
-    </HomeStack.Navigator>
-  );
-}
-
-const Tab = createBottomTabNavigator();
+// const Tab = createBottomTabNavigator();
 
 export default function App() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({color, size}) => {
-            let icons = {
-              Home: require('./assets/news.svg'),
-              Settings: require('./assets/settings.svg'),
-            };
-            return <VectorImage source={icons[route.name]} width={30} height={30} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'tomato',
-          inactiveTintColor: 'gray',
-          keyboardHidesTabBar: true,
-        }}>
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="PlaysScreen"
+          component={PlaysScreen}
+          options={{title: 'Репы'}}
+        />
+        <HomeStack.Screen
+          name="TurnipScreen"
+          component={TurnipScreen}
+          options={({route}) => ({title: route.params.title})}
+        />
+        <HomeStack.Screen
+          name="EditSpeechScreen"
+          component={EditSpeechScreen}
+          options={{
+            title: 'Редактирование речи',
+          }}
+        />
+      </HomeStack.Navigator>
+      {/*<Tab.Navigator*/}
+      {/*  screenOptions={({route}) => ({*/}
+      {/*    tabBarIcon: ({color, size}) => {*/}
+      {/*      let icons = {*/}
+      {/*        Home: require('./assets/news.svg'),*/}
+      {/*        Settings: require('./assets/settings.svg'),*/}
+      {/*      };*/}
+      {/*      return <VectorImage source={icons[route.name]} width={30} height={30} />;*/}
+      {/*    },*/}
+      {/*  })}*/}
+      {/*  tabBarOptions={{*/}
+      {/*    activeTintColor: 'tomato',*/}
+      {/*    inactiveTintColor: 'gray',*/}
+      {/*    keyboardHidesTabBar: true,*/}
+      {/*  }}>*/}
+      {/*  <Tab.Screen name="Home" component={HomeStackScreen} />*/}
+      {/*  <Tab.Screen name="Settings" component={SettingsScreen} />*/}
+      {/*</Tab.Navigator>*/}
     </NavigationContainer>
   );
 }

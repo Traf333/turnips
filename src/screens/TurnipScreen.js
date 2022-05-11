@@ -11,17 +11,25 @@ import {
 import TurnipItem from '../components/TurnipItem';
 import Modal from '../components/Modal';
 import Loader from '../components/Loader';
+import {fetchSpeeches} from '../lib/api';
+import {speechesStorage} from '../lib/storage';
 
 const TurnipScreen = ({route, navigation}) => {
+  const {id, roles} = route.params;
   const [selectedRole, setSelectedRole] = useState();
-  const [speeches, setSpeeches] = useState([]);
+  const [speeches, setSpeeches] = useState(
+    speechesStorage.getArray(`play-${id}`),
+  );
   const [showModal, setShowModal] = useState(false);
   const [selectedSpeechId, setSelectedSpeech] = useState();
-  const {id, roles} = route.params;
 
   useEffect(() => {
-    // dispatch('speeches/fetchAll', id);
-    setSpeeches([]);
+    if (!speeches) {
+      fetchSpeeches(id).then(data => {
+        setSpeeches(data);
+        speechesStorage.setArray(`play-${id}`, data);
+      });
+    }
   }, [id]);
 
   const handleOnDelete = useCallback(() => {
@@ -49,20 +57,20 @@ const TurnipScreen = ({route, navigation}) => {
     setSelectedSpeech(id);
     setShowModal(true);
   };
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableHighlight
-          onPress={handleSync}
-          underlayColor="#ddd"
-          style={{padding: 10}}>
-          <Text>Sync</Text>
-          {/*<Icon name="sync-outline" size={26} />*/}
-        </TouchableHighlight>
-      ),
-    });
-  }, []);
+  //
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableHighlight
+  //         onPress={handleSync}
+  //         underlayColor="#ddd"
+  //         style={{padding: 10}}>
+  //         <Text>Sync</Text>
+  //         {/*<Icon name="sync-outline" size={26} />*/}
+  //       </TouchableHighlight>
+  //     ),
+  //   });
+  // }, []);
 
   const renderItem = ({item}) => (
     <TurnipItem
@@ -150,7 +158,8 @@ const styles = StyleSheet.create({
   selector: {
     backgroundColor: '#ccc',
     margin: 10,
-    padding: 10,
+    height: 30,
+    padding: 6,
     borderRadius: 10,
   },
   selectedRole: {
